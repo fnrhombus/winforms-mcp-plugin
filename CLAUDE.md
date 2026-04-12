@@ -6,11 +6,9 @@ Claude Code plugin manifest for the [winforms-mcp](https://github.com/fnrhombus/
 
 This is an **MCP server plugin**, not a hooks plugin. The `.claude-plugin/plugin.json` declares an `mcpServers` entry that tells Claude Code to run `npx -y @fnrhombus/winforms-mcp` when the plugin is enabled. No hooks, no build step, no local code.
 
-## Version sync
+## Why nothing auto-updates
 
-Version updates are **automated**. When `fnrhombus/winforms-mcp` publishes a stable release, its `release-stable.yml` fires a `repository_dispatch` to this repo, which triggers `.github/workflows/sync-from-source.yml` to update `plugin.json` and rebuild the marketplace.
-
-No manual version bumping needed.
+The `mcpServers` entry uses `npx -y @fnrhombus/winforms-mcp`, which always fetches the latest version from npm at runtime. There's nothing to version-bump here on release — the plugin repo is effectively static infrastructure.
 
 ## README sync
 
