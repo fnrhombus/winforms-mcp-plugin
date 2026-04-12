@@ -12,7 +12,11 @@ This repo is just the plugin manifest. The server, docs, and issues all live in 
 
 ## How it works
 
-The plugin tells Claude Code to run `npx -y @fnrhombus/winforms-mcp`, which always fetches the latest version at runtime. Nothing here needs updating on release.
+The plugin tells Claude Code to run `npx -y @fnrhombus/winforms-mcp`. npm caches the package locally, so after a new release you may need to clear the cache to pick it up:
+
+```
+npx clear-npx-cache
+```
 
 ## License
 
