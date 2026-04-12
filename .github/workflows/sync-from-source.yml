@@ -1,0 +1,38 @@
+name: Sync from source repo
+
+# Triggered by fnrhombus/winforms-mcp release workflows via repository_dispatch.
+# Updates plugin.json version and triggers the marketplace rebuild.
+
+on:
+  repository_dispatch:
+    types: [release]
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update plugin.json version
+        run: |
+          VERSION="${{ github.event.client_payload.version }}"
+          echo "Updating plugin.json to version $VERSION"
+          jq --arg v "$VERSION" '.version = $v' .claude-plugin/plugin.json > tmp.json && mv tmp.json .claude-plugin/plugin.json
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .claude-plugin/plugin.json
+          git diff --staged --quiet || {
+            git commit -m "chore: sync version to ${{ github.event.client_payload.version }}"
+            git push
+          }
+
+      - name: Trigger marketplace rebuild
+        run: gh workflow run update-marketplace.yml --repo fnrhombus/claude-plugins
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
