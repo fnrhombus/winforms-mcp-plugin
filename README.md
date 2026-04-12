@@ -1,113 +1,18 @@
-<p align="center">
-  <h1 align="center">Rhombus.WinFormsMcp</h1>
-  <p align="center"><strong>Give AI agents eyes and hands for Windows Forms apps</strong></p>
-</p>
+# winforms-mcp plugin
 
-<p align="center">
-  <a href="https://github.com/fnrhombus/winforms-mcp/actions/workflows/ci.yml"><img src="https://github.com/fnrhombus/winforms-mcp/actions/workflows/ci.yml/badge.svg" alt="CI Status"></a>
-  <a href="https://www.nuget.org/packages/Rhombus.WinFormsMcp"><img src="https://img.shields.io/nuget/v/Rhombus.WinFormsMcp" alt="NuGet Version"></a>
-  <a href="https://www.npmjs.com/package/@fnrhombus/winforms-mcp"><img src="https://img.shields.io/npm/v/@fnrhombus/winforms-mcp" alt="NPM Version"></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-</p>
+Claude Code plugin wrapper for [**Rhombus.WinFormsMcp**](https://github.com/fnrhombus/winforms-mcp) — an MCP server that gives AI agents eyes and hands for Windows Forms apps.
 
-<p align="center">
-  An <a href="https://modelcontextprotocol.io">MCP server</a> that lets Claude (and any MCP-compatible agent) launch, automate, screenshot, and preview WinForms applications — without touching a mouse.
-</p>
-
----
-
-## The problem
-
-You're building a WinForms app with an AI coding agent. The agent can read and write your code, but it's **blind** — it can't see what the form looks like, can't click a button to test a workflow, and can't tell if the UI it just generated actually renders correctly.
-
-## The fix
-
-Install the plugin and restart. Now the agent can:
-
-| | |
-|---|---|
-| **See forms without building** | `render_form` turns any `.Designer.cs` into a pixel-accurate PNG — the same rendering pipeline Visual Studio uses |
-| **Drive running apps** | Launch processes, find elements by name/type/ID, click, type, drag-drop, take screenshots |
-| **Work in the background** | Headless mode runs apps on a hidden desktop — zero focus stealing, zero disruption |
-| **Target any framework** | .NET Framework 4.x, .NET Core 3.x, .NET 5–9+. Auto-detected from your `.csproj` |
-
-### `render_form` in action
-
-The agent reads your `.Designer.cs`, calls `render_form`, and gets back this — no build, no running app:
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/fnrhombus/winforms-mcp/dev/docs/images/render-form-demo.png" alt="render_form output — Address Entry Form" width="400">
-</p>
-
-It can then edit the layout, re-render, and iterate — a full visual feedback loop with no IDE, no build, and no human in the loop.
+This repo is just the plugin manifest. The server, docs, and issues all live in the [source repo](https://github.com/fnrhombus/winforms-mcp).
 
 ## Install
 
 ```
-/plugin marketplace add fnrhombus/claude-plugins
-/plugin install winforms-mcp@fnrhombus-plugins
+/install-plugin fnrhombus/winforms-mcp-plugin
 ```
 
-That's it. The agent can now see and interact with any WinForms application on your machine.
+## How it works
 
-> **Other install methods:** For manual MCP config (npx, standalone exe, NuGet tool), see the [source repo](https://github.com/fnrhombus/winforms-mcp#quick-start).
-
-## Tools
-
-| Category | Tools | Description |
-|----------|-------|-------------|
-| **Process** | `launch_app` `attach_to_process` `close_app` `get_process_status` | Start, attach to, and manage Windows processes |
-| **Discovery** | `find_element` `element_exists` `wait_for_element` `get_element_tree` | Locate UI elements by AutomationId, name, class, or control type |
-| **Interaction** | `click_element` `type_text` `set_value` `select_item` `click_menu_item` `drag_drop` `send_keys` | Click buttons, fill text boxes, select combo items, navigate menus |
-| **Visual** | `take_screenshot` `render_form` | Capture running apps or render `.Designer.cs` to PNG |
-
-## Cross-framework rendering
-
-`render_form` detects your project's target framework and dispatches to a matching out-of-process host:
-
-| Your project targets | Renderer host |
-|---|---|
-| .NET Framework 4.0–4.8.x | `net48` |
-| .NET Core 3.x | `netcoreapp3.1` |
-| .NET 5, 6, 7, 8, 9+ | `net8.0-windows` |
-
-Custom controls, third-party components, and framework-specific APIs all resolve correctly. Override with the `TFM` environment variable if needed.
-
-## Headless mode
-
-Set `HEADLESS=true` to launch apps on a hidden Windows desktop (`CreateDesktop` API):
-
-- **Zero focus stealing** — apps can't steal focus, show TopMost windows, or flash in the taskbar
-- **Full automation** — element discovery, clicking, typing, and screenshots all work through UIA patterns and PrintWindow
-- **Mixed mode** — headless and visible apps in the same session, each automatically routed to its correct desktop
-
-> **Note:** `send_keys` and `drag_drop` require input simulation and only work on the visible desktop. Use `type_text`/`set_value` and `click_element` for headless processes.
-
-## Environment variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `HEADLESS` | `false` | Run launched apps on a hidden desktop |
-| `TFM` | `auto` | Lock rendering to a specific framework (`net48`, `netcoreapp3.1`, `net8.0-windows`) |
-| `TELEMETRY_OPTOUT` | `false` | Disable all Application Insights telemetry (matches .NET CLI conventions) |
-
-## Documentation
-
-- [Examples](https://github.com/fnrhombus/winforms-mcp/blob/dev/docs/EXAMPLES.md) — common workflows and patterns
-- [Headless Mode](https://github.com/fnrhombus/winforms-mcp/blob/dev/docs/HEADLESS_MODE.md) — hidden desktop architecture and tool compatibility
-
-## Contributing
-
-Contributions welcome! See the [source repo](https://github.com/fnrhombus/winforms-mcp) for development guidelines and [open issues](https://github.com/fnrhombus/winforms-mcp/issues).
-
-## Support
-
-If you find this project useful, consider supporting its development:
-
-- **[GitHub Sponsors](https://github.com/sponsors/fnrhombus)** — Monthly sponsorship with public recognition
-- **[Buy Me a Coffee](https://buymeacoffee.com/fnrhombus)** — One-time or recurring donations
-
-Your support helps maintain and improve this project!
+The plugin tells Claude Code to run `npx -y @fnrhombus/winforms-mcp`, which always fetches the latest version at runtime. Nothing here needs updating on release.
 
 ## License
 
