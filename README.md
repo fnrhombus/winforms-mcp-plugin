@@ -7,7 +7,8 @@ This repo is just the plugin manifest. The server, docs, and issues all live in 
 ## Install
 
 ```
-/install-plugin fnrhombus/winforms-mcp-plugin
+/plugin marketplace add fnrhombus/winforms-mcp-plugin
+/plugin install winforms-mcp@fnrhombus-winforms-mcp-plugin
 ```
 
 ## How it works
