@@ -1,36 +1,34 @@
-# TODO-plugin-name
+# winforms-mcp
 
-**TODO: one-line pitch for what this plugin does and why someone should care.**
+**Give Claude Code full control of Windows desktop apps — click buttons, fill forms, read tables, take screenshots — all headless.**
 
-[![npm](https://img.shields.io/npm/v/TODO-plugin-name)](https://www.npmjs.com/package/TODO-plugin-name)
-[![license](https://img.shields.io/npm/l/TODO-plugin-name)](./LICENSE)
-
-<!--
-  This README is advertising, not documentation. Lead with the pain point
-  and the before/after. Keep install instructions short. Link out for the
-  rest.
--->
+[![NuGet](https://img.shields.io/nuget/v/Rhombus.WinFormsMcp)](https://www.nuget.org/packages/Rhombus.WinFormsMcp)
+[![npm](https://img.shields.io/npm/v/@fnrhombus/winforms-mcp)](https://www.npmjs.com/package/@fnrhombus/winforms-mcp)
+[![license](https://img.shields.io/github/license/fnrhombus/winforms-mcp)](./LICENSE)
 
 ## The problem
 
-TODO: describe the problem this plugin solves. Use a concrete example. Show code or a screenshot of the bad state.
+Claude Code can't interact with Windows desktop applications. If you need to automate a WinForms app — launch it, click through dialogs, scrape data from grids, validate UI state — you're on your own.
 
 ## The fix
 
-TODO: show the after-state. Same example, fixed. Ideally a single copy-paste command.
+This plugin adds a WinForms automation MCP server that gives Claude 33 tools for headless UI automation via [FlaUI](https://github.com/FlaUI/FlaUI):
+
+- **Launch & attach** to Windows processes
+- **Find & interact** with UI elements (click, type, select, drag-drop)
+- **Read** properties, table data, tooltips, clipboard
+- **Wait** for elements and conditions
+- **Screenshot** windows — even on a hidden desktop
+- **Headless mode** — run automations without showing any windows
 
 ## Install
 
 ```
 /plugin marketplace add fnrhombus/claude-plugins
-/plugin install TODO-plugin-name@fnrhombus-plugins
+/plugin install winforms-mcp@fnrhombus-plugins
 ```
 
-Or via npm:
-
-```bash
-npx -y TODO-plugin-name
-```
+Full documentation and source: [fnrhombus/winforms-mcp](https://github.com/fnrhombus/winforms-mcp)
 
 ## Support
 

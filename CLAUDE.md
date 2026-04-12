@@ -1,42 +1,25 @@
-# Claude Code Plugin Template
+# winforms-mcp-plugin
 
-This is a template repo. When a new plugin is created from it (`gh repo create --template fnrhombus/claude-code-plugin-template`), this file tells Claude (and future-you) what to do.
+Claude Code plugin manifest for the [winforms-mcp](https://github.com/fnrhombus/winforms-mcp) MCP server. This repo contains only the plugin metadata — the actual server is distributed via npm (`@fnrhombus/winforms-mcp`) and NuGet (`Rhombus.WinFormsMcp`).
 
-## First-time setup for a new plugin
+## How it works
 
-After cloning the new repo:
+This is an **MCP server plugin**, not a hooks plugin. The `.claude-plugin/plugin.json` declares an `mcpServers` entry that tells Claude Code to run `npx -y @fnrhombus/winforms-mcp` when the plugin is enabled. No hooks, no build step, no local code.
 
-1. **Search-and-replace `TODO-plugin-name`** in `.claude-plugin/plugin.json`, `README.md`, and `package.json` with the actual plugin name (kebab-case, e.g. `claude-code-thingfix`).
-2. **Search-and-replace `TODO-repo-name`** with the actual GitHub repo name (usually the same as the plugin name).
-3. **Update `.claude-plugin/plugin.json`** with a real `description`.
-4. **Write the actual plugin code** in `src/index.ts`. Use [`@fnrhombus/claude-code-hooks`](https://github.com/fnrhombus/claude-code-hooks) for the typed hook wrapper — it handles all the stdin/stdout/envelope plumbing.
-5. **Update `hooks/hooks.json`** if the hook event or matcher is different from the default `PreToolUse` / `Bash`.
-6. **Rewrite `README.md`** as *advertising* — lead with the problem, show the before/after, keep install minimal. See `fnrhombus/claude-code-pathfix` for a reference.
-7. **Add the `claude-code-plugin` topic** to the repo: `gh repo edit --add-topic claude-code-plugin`. This is how `fnrhombus/claude-plugins` (the central marketplace) discovers the plugin — without this topic, the plugin will never show up in `/plugin install`.
-8. **Commit + push** to `main`.
+## Updating the version
 
-## Publishing a new version
+When a new version of winforms-mcp is released:
 
-1. Bump the `version` in both `package.json` and `.claude-plugin/plugin.json` (keep them in sync).
-2. Commit, tag (`git tag v0.2.0 && git push --tags`), let CI publish to npm.
-3. **Refresh the marketplace** so users see the new version within minutes instead of waiting for the daily cron:
+1. Update the `version` field in `.claude-plugin/plugin.json` to match the latest stable release of `@fnrhombus/winforms-mcp`.
+2. Commit and push to `main`.
+3. Refresh the marketplace:
 
    ```bash
    gh workflow run update-marketplace.yml --repo fnrhombus/claude-plugins
    ```
 
-   This triggers the marketplace repo's `update-marketplace.yml` workflow manually. It will re-scan all `claude-code-plugin`-tagged repos (including this one), read the updated `plugin.json`, and commit a refreshed `marketplace.json` to itself.
+   Or wait for the daily cron to pick it up.
 
-   Alternatively, wait — the marketplace refreshes on a daily cron anyway. The manual trigger is only useful if you want the new version visible immediately.
+## Discovery
 
-## Why the indirect flow?
-
-GitHub's `GITHUB_TOKEN` is scoped to its own repo, so this plugin's CI can't push to `fnrhombus/claude-plugins` directly. Cross-repo pushes would need a Personal Access Token stored as a secret in every plugin repo — annoying to set up once per plugin, and a long-lived credential to manage.
-
-Instead, the marketplace *pulls* from plugin repos on a schedule using its own `GITHUB_TOKEN` (which naturally has write access to itself). Plugin repos don't need any secrets or auth; they just need the `claude-code-plugin` topic and a valid `.claude-plugin/plugin.json` on their default branch.
-
-## What NOT to do
-
-- **Don't hand-edit `fnrhombus/claude-plugins/.claude-plugin/marketplace.json`.** The cron overwrites it on every run. Update the source (`.claude-plugin/plugin.json` in *this* repo) and let the cron propagate.
-- **Don't forget the `claude-code-plugin` topic.** Without it, the marketplace has no way to discover the repo, and users can't install the plugin.
-- **Don't skip the `dist/` commit.** Plugins distributed via `/plugin install` are served directly from the GitHub repo contents — there's no build step on the user side. If this plugin has a build step (tsup, etc.), commit `dist/` alongside `src/` so the plugin hook can actually run what it advertises.
+The `claude-code-plugin` topic on this repo is what allows `fnrhombus/claude-plugins` (the central marketplace) to discover it. Don't remove the topic.
