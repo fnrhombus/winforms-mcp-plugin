@@ -1,19 +1,28 @@
 # winforms-mcp plugin
 
-Claude Code plugin wrapper for [**Rhombus.WinFormsMcp**](https://github.com/fnrhombus/winforms-mcp) — an MCP server that gives AI agents eyes and hands for Windows Forms apps.
+Claude Code plugin for [**Rhombus.WinFormsMcp**](https://github.com/fnrhombus/winforms-mcp) — an MCP server that gives AI agents eyes and hands for Windows Forms apps.
 
 This repo is just the plugin manifest. The server, docs, and issues all live in the [source repo](https://github.com/fnrhombus/winforms-mcp).
 
 ## Install
 
+**Step 1 — Add the marketplace** (one-time):
+
 ```
 /plugin marketplace add fnrhombus/winforms-mcp-plugin
+```
+
+**Step 2 — Install the plugin**:
+
+```
 /plugin install winforms-mcp@fnrhombus-winforms-mcp-plugin
 ```
 
-## How it works
+Restart Claude Code and you're done. The plugin runs `npx -y @fnrhombus/winforms-mcp` under the hood — npm caches the package locally, so startup is fast after the first run.
 
-The plugin tells Claude Code to run `npx -y @fnrhombus/winforms-mcp`. npm caches the package locally, so after a new release you may need to force a fresh download:
+## Forcing a fresh version
+
+After a new release, npm may serve a cached copy. To force a fresh download:
 
 ```
 npx -y @fnrhombus/winforms-mcp@latest
